@@ -14,6 +14,7 @@
 		CE8922BD1B05491E0046FA64 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE8922BC1B05491E0046FA64 /* Images.xcassets */; };
 		CE8922C01B05491E0046FA64 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE8922BE1B05491E0046FA64 /* LaunchScreen.xib */; };
 		CE8922CC1B05491E0046FA64 /* TicTacToeObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8922CB1B05491E0046FA64 /* TicTacToeObjCTests.m */; };
+		CE8922D71B0581690046FA64 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8922D61B0581690046FA64 /* WebViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,8 @@
 		CE8922C51B05491E0046FA64 /* TicTacToeObjCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TicTacToeObjCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8922CA1B05491E0046FA64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE8922CB1B05491E0046FA64 /* TicTacToeObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TicTacToeObjCTests.m; sourceTree = "<group>"; };
+		CE8922D51B0581690046FA64 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		CE8922D61B0581690046FA64 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,8 @@
 				CE8922B41B05491E0046FA64 /* AppDelegate.m */,
 				CE8922B61B05491E0046FA64 /* ViewController.h */,
 				CE8922B71B05491E0046FA64 /* ViewController.m */,
+				CE8922D51B0581690046FA64 /* WebViewController.h */,
+				CE8922D61B0581690046FA64 /* WebViewController.m */,
 				CE8922B91B05491E0046FA64 /* Main.storyboard */,
 				CE8922BC1B05491E0046FA64 /* Images.xcassets */,
 				CE8922BE1B05491E0046FA64 /* LaunchScreen.xib */,
@@ -222,6 +227,7 @@
 				CE8922B81B05491E0046FA64 /* ViewController.m in Sources */,
 				CE8922B51B05491E0046FA64 /* AppDelegate.m in Sources */,
 				CE8922B21B05491E0046FA64 /* main.m in Sources */,
+				CE8922D71B0581690046FA64 /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
