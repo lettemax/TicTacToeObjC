@@ -81,7 +81,6 @@
             self.whichPlayerLabel.center = self.center;
 
             NSString *winner = [self checkForWinner];
-            //NSLog(@"%@ asdf", winner);
 
             if (!([winner isEqualToString:@""]))
             {
@@ -93,6 +92,7 @@
             [self.freeSquares removeObject:label];
 
         } else {
+            //animates 'drag back' to 'center' (original position of whichPlayerLabel
             [UIView animateWithDuration:0.5f animations:^
              {
                  self.whichPlayerLabel.center = self.center;
@@ -137,7 +137,6 @@
         {
             return label1.text;
         }
-        NSLog(@"%@, %@, %@", label1.text, label2.text, label3.text);
     }
 
     for (int col = 0; col < 3; col++)
@@ -148,14 +147,12 @@
         if ([label1.text isEqualToString:label2.text] &&
             [label2.text isEqualToString:label3.text] && label1.text.length > 0)
         {
-            NSLog(@"%@, %@, %@", label1.text, label2.text, label3.text);
             return label1.text;
         }
     }
 
     if ([self.labelOne.text isEqualToString:self.labelFive.text] && [self.labelFive.text isEqualToString:self.labelNine.text] && self.labelOne.text.length > 0)
     {
-        NSLog(@"diagonal wins");
         return self.labelOne.text;
     }
 
@@ -254,7 +251,7 @@
 
 -(void)computerTurn
 {
-    self.humanTurn = NO;
+    //self.humanTurn = NO;
 
     int randomNum = arc4random_uniform(self.freeSquares.count);
 
@@ -273,7 +270,10 @@
         [self togglePlayer];
     }
 
-    self.humanTurn = YES;
+    //self.humanTurn = YES;
 }
+
+//stop timer when help button clicked
+//reset timer when done button clicked
 
 @end
