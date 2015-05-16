@@ -120,7 +120,7 @@
                         <outlet property="labelSix" destination="CMW-HX-gNJ" id="RtG-Du-7oj"/>
                         <outlet property="labelThree" destination="Yz5-DW-TCR" id="Dcc-5b-P3l"/>
                         <outlet property="labelTwo" destination="GCv-3r-u1k" id="61s-gM-qds"/>
-                        <outlet property="timer" destination="7fY-R9-fLI" id="JC3-3s-aqm"/>
+                        <outlet property="timerLabel" destination="7fY-R9-fLI" id="N0w-Wd-Mdv"/>
                         <outlet property="whichPlayerLabel" destination="WoN-1b-fVH" id="nlB-0K-Oh6"/>
                     </connections>
                 </viewController>

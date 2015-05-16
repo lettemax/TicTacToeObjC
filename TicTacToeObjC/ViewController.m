@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
+#include <stdlib.h>
 
 @interface ViewController () <UIAlertViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UILabel *labelOne;
 @property (weak, nonatomic) IBOutlet UILabel *labelTwo;
 @property (weak, nonatomic) IBOutlet UILabel *labelThree;
@@ -20,9 +22,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelNine;
 @property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 @property NSArray *grid;
-@property NSSet *freeSquares;
+@property NSMutableArray *freeSquares;
 @property CGPoint center;
-@property (weak, nonatomic) IBOutlet UILabel *timer;
+@property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+@property NSTimer *timer;
+@property NSRunLoop *runner;
+@property BOOL humanTurn;
 
 @end
 
@@ -31,10 +36,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.grid = @[self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine];
+    self.freeSquares = [NSMutableArray new];
+    [self.freeSquares addObjectsFromArray:self.grid];
     self.whichPlayerLabel.text = @"X";
     self.whichPlayerLabel.textColor = [UIColor blueColor];
-    self.freeSquares = [NSSet setWithArray:self.grid];
     self.center = self.whichPlayerLabel.center;
+    self.timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(onTick:) userInfo:nil repeats:YES];
+    self.runner = [NSRunLoop currentRunLoop];
+    [self.runner addTimer:self.timer forMode:NSDefaultRunLoopMode];
+    self.humanTurn = YES;
 
 }
 
@@ -70,14 +80,17 @@
             label.textColor = self.whichPlayerLabel.textColor;
             self.whichPlayerLabel.center = self.center;
 
-            [self togglePlayer];
-
             NSString *winner = [self checkForWinner];
+            //NSLog(@"%@ asdf", winner);
 
             if (!([winner isEqualToString:@""]))
             {
                 [self announceWinnerAndResetGame:winner];
+            } else {
+                [self togglePlayer];
             }
+
+            [self.freeSquares removeObject:label];
 
         } else {
             [UIView animateWithDuration:0.5f animations:^
@@ -97,42 +110,34 @@
 
     if (label != nil && [label.text isEqualToString:@""])
     {
-
-        if ([self.whichPlayerLabel.text isEqualToString:(@"X")])
-        {
-            label.text = @"X";
-            label.textColor = [UIColor blueColor];
-            self.whichPlayerLabel.text = @"O";
-            self.whichPlayerLabel.textColor = [UIColor redColor];
-        } else {
-            label.text = @"O";
-            label.textColor = [UIColor redColor];
-            self.whichPlayerLabel.text = @"X";
-            self.whichPlayerLabel.textColor = [UIColor blueColor];
-        }
+        label.text = @"X";
+        label.textColor = [UIColor blueColor];
+        [self.freeSquares removeObject:label];
 
         NSString *winner = [self checkForWinner];
 
         if (!([winner isEqualToString:@""]))
         {
             [self announceWinnerAndResetGame:winner];
+        } else {
+            [self togglePlayer];
         }
-
     }
 }
 
 -(NSString *)checkForWinner
 {
-    for (int row = 0; row < 3; row+= 3)
+    for (int row = 0; row < 9; row+=3)
     {
         UILabel *label1 = self.grid[row];
         UILabel *label2 = self.grid[row+1];
         UILabel *label3 = self.grid[row+2];
         if ([label1.text isEqualToString:label2.text] &&
-            [label2.text isEqualToString:label3.text])
+            [label2.text isEqualToString:label3.text] && label1.text.length > 0)
         {
             return label1.text;
         }
+        NSLog(@"%@, %@, %@", label1.text, label2.text, label3.text);
     }
 
     for (int col = 0; col < 3; col++)
@@ -141,18 +146,20 @@
         UILabel *label2 = self.grid[col+3];
         UILabel *label3 = self.grid[col+6];
         if ([label1.text isEqualToString:label2.text] &&
-            [label2.text isEqualToString:label3.text])
+            [label2.text isEqualToString:label3.text] && label1.text.length > 0)
         {
+            NSLog(@"%@, %@, %@", label1.text, label2.text, label3.text);
             return label1.text;
         }
     }
 
-    if ([self.labelOne.text isEqualToString:self.labelFive.text] && [self.labelFive.text isEqualToString:self.labelNine.text])
+    if ([self.labelOne.text isEqualToString:self.labelFive.text] && [self.labelFive.text isEqualToString:self.labelNine.text] && self.labelOne.text.length > 0)
     {
+        NSLog(@"diagonal wins");
         return self.labelOne.text;
     }
 
-    if ([self.labelThree.text isEqualToString:self.labelFive.text] && [self.labelFive.text isEqualToString:self.labelSeven.text])
+    if ([self.labelThree.text isEqualToString:self.labelFive.text] && [self.labelFive.text isEqualToString:self.labelSeven.text] && self.labelThree.text.length > 0)
     {
         return self.labelThree.text;
     }
@@ -168,18 +175,23 @@
     [alertView addButtonWithTitle:@"Done"];
     alertView.delegate = self;
 
+    alertView.tag = 0;
+
     [alertView show];
-
-
-
 
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 0)
+    if (alertView.tag == 0)
     {
-        [self resetGame];
+        if (buttonIndex == 0)
+        {
+            [self resetGame];
+        }
+    } else {
+        self.timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(onTick:) userInfo:nil repeats:YES];
+        [self togglePlayer];
     }
 }
 
@@ -191,7 +203,13 @@
 
     self.whichPlayerLabel.text = @"X";
     self.whichPlayerLabel.textColor = [UIColor blueColor];
-}
+
+    self.freeSquares = [NSMutableArray new];
+    [self.freeSquares addObjectsFromArray:self.grid];
+
+    [self resetTimer];
+
+    }
 
 -(void)togglePlayer
 {
@@ -199,11 +217,63 @@
     {
         self.whichPlayerLabel.text = @"O";
         self.whichPlayerLabel.textColor = [UIColor redColor];
+        [self computerTurn];
     } else {
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
     }
 
+    [self resetTimer];
+
+}
+
+-(void)onTick:(NSTimer *)timer
+{
+    int time = [self.timerLabel.text intValue];
+
+    if (time > 0) {
+        self.timerLabel.text = [NSString stringWithFormat:@"%i", (time - 1)];
+    } else {
+        [self.timer invalidate];
+        UIAlertView *timerAlert = [[UIAlertView alloc]init];
+        timerAlert.title = @"Time's up!";
+        [timerAlert addButtonWithTitle:@"Dismiss"];
+        timerAlert.delegate = self;
+
+        timerAlert.tag = 1;
+
+        [timerAlert show];
+    }
+}
+
+-(void)resetTimer
+{
+    self.timerLabel.text = @"10";
+    [self.runner addTimer:self.timer forMode:NSDefaultRunLoopMode];
+}
+
+-(void)computerTurn
+{
+    self.humanTurn = NO;
+
+    int randomNum = arc4random_uniform(self.freeSquares.count);
+
+    UILabel *label = self.freeSquares[randomNum];
+    label.text = self.whichPlayerLabel.text;
+    label.textColor = self.whichPlayerLabel.textColor;
+
+    [self.freeSquares removeObjectAtIndex:randomNum];
+
+    NSString *winner = [self checkForWinner];
+
+    if (!([winner isEqualToString:@""]))
+    {
+        [self announceWinnerAndResetGame:winner];
+    } else {
+        [self togglePlayer];
+    }
+
+    self.humanTurn = YES;
 }
 
 @end
