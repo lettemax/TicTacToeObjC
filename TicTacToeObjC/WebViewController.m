@@ -7,6 +7,7 @@
 //
 
 #import "WebViewController.h"
+#import "ViewController.h"
 
 @interface WebViewController ()
 
@@ -20,6 +21,10 @@
     [super viewDidLoad];
     [self loadRequestWithText:@"http://www.wikihow.com/Play-Tic-Tac-Toe"];
 
+//    ViewController *vc = self.presentingViewController;
+//
+//    [vc.timer invalidate];
+
 }
 
 -(void)loadRequestWithText:(NSString *)text
@@ -30,6 +35,14 @@
 }
 
 - (IBAction)doneButtonPressed:(UIButton *)sender {
+
+//    ViewController *vc = self.presentingViewController;
+//
+//    vc.timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(onTick:) userInfo:nil repeats:YES];
+//
+//     [vc.runner addTimer:vc.timer forMode:NSDefaultRunLoopMode];
+
+
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
